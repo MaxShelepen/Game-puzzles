@@ -2,8 +2,7 @@
 
 export default class SpeakIT {
   constructor() {
-    this.group = 0;
-    this.page = 0;
+    this.wordPerPage = 10;//ипользуем переменную для разбивки массива по предложениям Раундов(10)
   }
 
   async levelOne() {
@@ -33,6 +32,7 @@ export default class SpeakIT {
   }
   async levelSix() {
     const levelSix = await import('./data/book6.js');
+    const result = await Promise.all(levelSix.map((el) => el))
     console.log(levelSix);
     return levelSix;
   }
@@ -40,9 +40,11 @@ export default class SpeakIT {
   valueLevel() {
     this.buttonSelection = document.getElementById('select');
     this.inputLevel = document.getElementById('level');
+    this.inputPage = document.getElementById('page');
     this.buttonSelection.addEventListener('click', (e) => {
       e.preventDefault();
       this.value = this.inputLevel.value;
+      this.valuePage = this.inputPage.value;
       this.changeLevelWords();
     })
   }
@@ -68,14 +70,34 @@ export default class SpeakIT {
         break;
     }
   }
- listWords(el) {
-  const result = el;
-  console.log(result);
-  return result;
+ async listWords(el) {
+  const result = await el;
+  const begin = ((this.valuePage * this.wordPerPage) - this.wordPerPage);
+  const end = begin + this.wordPerPage;
+  const words = result.default.slice(begin, end);
+  console.log(this.createShuffledArray(words[0].textExample));
+}
+
+createShuffledArray(string) {
+  const array = string.split(' ');
+
+  let currentIndex = array.length, temporaryValue, randomIndex;
+
+  while (0 !== currentIndex) {
+
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
 }
   
   init() {
-    this.valueLevel();
+  this.valueLevel();
    this.listWords();
   }
 }
