@@ -1,5 +1,5 @@
 {
-  "name": "speakit",
+  "name": "puzzle",
   "version": "1.0.0",
   "description": "",
   "main": "script.js",
@@ -9,7 +9,7 @@
     "watch": "webpack --watch",
     "start": "webpack-dev-server --open"
   },
-  "author": "Aleh_Serhiyenia",
+  "author": "Max Shelepen",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.6.0",
