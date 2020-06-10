@@ -2,6 +2,7 @@
 
 export default class SpeakIT {
   constructor() {
+    this.currentPage = [];
     this.wordPerPage = 10;//ипользуем переменную для разбивки массива по предложениям Раундов(10)
   }
 
@@ -75,7 +76,15 @@ export default class SpeakIT {
   const begin = ((this.valuePage * this.wordPerPage) - this.wordPerPage);
   const end = begin + this.wordPerPage;
   const words = result.default.slice(begin, end);
-  console.log(this.createShuffledArray(words[0].textExample));
+  // console.log(this.createShuffledArray(words[0].textExample));
+  // let array = this.createShuffledArray(words[0].textExample));
+  //  this.createPeage(words);
+   this.currentPage = this.createPuzzle(words);
+   this.renderPuzzle(this.currentPage[0].randomWords);
+   
+   console.log(this.currentPage[0].randomWords);
+  // console.log(words.length)
+  
 }
 
 createShuffledArray(string) {
@@ -96,8 +105,58 @@ createShuffledArray(string) {
   return array;
 }
   
+createPuzzle(arr) {
+  const array = [];
+  const arrayPuzzle = arr.map((el) => {
+    array.push({
+      audioExample: el.audioExample,
+      textExample: el.textExample,
+      textArray: el.textExample.split(' '),
+      randomWords: this.createShuffledArray(el.textExample),
+      translation: el.textExampleTranslate,
+    });
+  });
+  return array;
+}
+
+renderPuzzle(arr) {
+  const fragment = document.createDocumentFragment();
+  arr.map(el => {
+    const node = document.createElement('span');
+    node.className = 'word__item';
+    node.style.flexGrow = el.length - 1;
+    node.textContent = el;
+    fragment.appendChild(node);
+
+  });
+  document.querySelector('#task-line').innerHTML = '';
+  document.querySelector('#task-line').appendChild(fragment);
+}
+
+  eventHandler() {
+    const taskLine = document.getElementById('task-line');
+    const solvedLine = document.getElementById('result-container');
+    const parentWidth = solvedLine.getBoundingClientRect().width;
+    taskLine.addEventListener('click', e => { 
+      console.log(parentWidth);
+      const targetWidth = e.target.getBoundingClientRect().width;
+      const newTargetWidth = targetWidth / parentWidth * 100;
+      const word = document.createElement('span');
+      word.className = 'word__puzzle'
+      word.style.width = `${newTargetWidth}%`;
+      word.style.display = 'inline-block';
+      word.textContent = e.target.textContent;
+      solvedLine.appendChild(word);
+      e.target.className === 'word__item' ? e.target.remove() : null;
+      e.currentTarget.style.width = `${solvedLine.getBoundingClientRect().width - (solvedLine.getBoundingClientRect().width * newTargetWidth / 100)}px`;
+  })
+    
+}
+
+
   init() {
   this.valueLevel();
    this.listWords();
+   this.eventHandler();
   }
 }

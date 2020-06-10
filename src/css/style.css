@@ -46,9 +46,27 @@ button {
   padding-top: 25px;
 }
 .game-page__task-line {
-  width: 95%;
+  width: 90%;
   margin: 20px auto;
   height: 4vh;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  border: 1px solid green;
+}
+
+.word__item {
+  margin: 0 auto;
+  /* border-right: 1px solid green; */
+  text-align: center;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.word__item:after {
+  content: '';
+  height: 100%;
+  width: 1px;
+  background-color: green;
+  position: absolute;
+  right: 0;
 }
