@@ -135,11 +135,15 @@ renderPuzzle(arr) {
 
   eventHandler() {
     const taskLine = document.getElementById('task-line');
-    const solvedLine = document.getElementById('result-container');
+    // const parentTaskLine = taskline.getBoundingClientRect().width;
+    const solvedLine = document.getElementById('1-str');
     const parentWidth = solvedLine.getBoundingClientRect().width;
-    taskLine.addEventListener('click', e => { 
-      console.log(parentWidth);
+
+    taskLine.addEventListener('click', e => {
+      // console.log('parentWidth', '  ' , parentWidth);
+      const parentTasklineWidth = e.currentTarget.getBoundingClientRect().width;
       const targetWidth = e.target.getBoundingClientRect().width;
+      console.log(targetWidth);
       const newTargetWidth = targetWidth / parentWidth * 100;
       const word = document.createElement('span');
       word.className = 'word__puzzle'
@@ -148,7 +152,7 @@ renderPuzzle(arr) {
       word.textContent = e.target.textContent;
       solvedLine.appendChild(word);
       e.target.className === 'word__item' ? e.target.remove() : null;
-      e.currentTarget.style.width = `${solvedLine.getBoundingClientRect().width - (solvedLine.getBoundingClientRect().width * newTargetWidth / 100)}px`;
+      e.currentTarget.style.width = `${parentTasklineWidth  - targetWidth}px`;
   })
     
 }
